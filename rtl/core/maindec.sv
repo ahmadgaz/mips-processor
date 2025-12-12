@@ -15,19 +15,19 @@ module maindec (
   // -----------------------
 
   // reg_dst encodings
-  localparam logic REGDSTRT = 2'b00;
-  localparam logic REGDSTRD = 2'b01;
-  localparam logic REGDSTRA = 2'b10;
+  localparam logic [1:0] REGDSTRT = 2'b00;
+  localparam logic [1:0] REGDSTRD = 2'b01;
+  localparam logic [1:0] REGDSTRA = 2'b10;
 
   // dm2reg encodings
-  localparam logic DM2REGALU = 2'b00;
-  localparam logic DM2REGDM = 2'b01;
-  localparam logic DM2REGPC4 = 2'b10;
+  localparam logic [1:0] DM2REGALU = 2'b00;
+  localparam logic [1:0] DM2REGDM = 2'b01;
+  localparam logic [1:0] DM2REGPC4 = 2'b10;
 
   // alu_op encodings
-  localparam logic ALUOPADD = 2'b00;
-  localparam logic ALUOPSUB = 2'b01;
-  localparam logic ALUOPFUNCT = 2'b10;
+  localparam logic [1:0] ALUOPADD = 2'b00;
+  localparam logic [1:0] ALUOPSUB = 2'b01;
+  localparam logic [1:0] ALUOPFUNCT = 2'b10;
 
   // single-bit controls
   localparam logic WREGEN = 1'b1;

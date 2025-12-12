@@ -12,18 +12,18 @@ module auxdec (
   // -----------------------
 
   // alu_ctrl encodings
-  localparam logic ALUADD = 3'b010;
-  localparam logic ALUSUB = 3'b110;
-  localparam logic ALUAND = 3'b000;
-  localparam logic ALUOR = 3'b001;
-  localparam logic ALUSLT = 3'b111;
-  localparam logic ALUSLL = 3'b100;
-  localparam logic ALUSRL = 3'b101;
+  localparam logic [2:0] ALUADD = 3'b010;
+  localparam logic [2:0] ALUSUB = 3'b110;
+  localparam logic [2:0] ALUAND = 3'b000;
+  localparam logic [2:0] ALUOR = 3'b001;
+  localparam logic [2:0] ALUSLT = 3'b111;
+  localparam logic [2:0] ALUSLL = 3'b100;
+  localparam logic [2:0] ALUSRL = 3'b101;
 
   // rf_awd_src encodings
-  localparam logic RFAWDALU = 2'b00;
-  localparam logic RFAWDHI = 2'b01;
-  localparam logic RFAWDLO = 2'b10;
+  localparam logic [1:0] RFAWDALU = 2'b00;
+  localparam logic [1:0] RFAWDHI = 2'b01;
+  localparam logic [1:0] RFAWDLO = 2'b10;
 
   // hilo_we encoding
   localparam logic HILOEN = 1'b1;
