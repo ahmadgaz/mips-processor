@@ -18,6 +18,7 @@ module tb_mips_soc;
   mips_soc dut (
       .clk       (clk),
       .rst       (rst),
+      .ra3       (5'b0),
       .gpi1      (gpi1),
       .gpi2      (gpo1),
       .pc_current(pc_current),
@@ -25,9 +26,10 @@ module tb_mips_soc;
       .alu_out   (alu_out),
       .wd_dm     (wd_dm),
       .rd_dm     (rd_dm),
-      .we_dm     (we_dm),
       .gpo1      (gpo1),
-      .gpo2      (gpo2)
+      .gpo2      (gpo2),
+      .rd3       (),
+      .we_dm     ()
   );
 
   initial begin

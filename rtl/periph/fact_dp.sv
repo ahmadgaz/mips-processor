@@ -2,6 +2,7 @@ module fact_dp #(
     parameter int WIDTH = 32
 ) (
     input clk,
+    input rst,
     input load_cnt,
     input en,
     input sel_1,
@@ -34,7 +35,8 @@ module fact_dp #(
       .WIDTH(WIDTH)
   ) register (
       .clk(clk),
-      .rst(0),
+      .rst(rst),
+      .clr(1'b0),
       .en (load_reg),
       .d  (next_prod),
       .q  (curr_prod)

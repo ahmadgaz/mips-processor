@@ -37,6 +37,7 @@ module fact #(
       .WIDTH(WIDTH)
   ) dp (
       .clk(clk),
+      .rst(rst),
       .load_cnt(load_cnt),
       .en(en),
       .sel_1(sel_1),

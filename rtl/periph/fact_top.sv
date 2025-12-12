@@ -30,6 +30,7 @@ module fact_top (
       .d  ({28'b0, wd}),
       .en (we1),
       .rst(rst),
+      .clr(1'b0),
       .clk(clk),
       .q  (n_curr)
   );
@@ -37,6 +38,7 @@ module fact_top (
       .d  (wd[0]),
       .en (we2),
       .rst(rst),
+      .clr(1'b0),
       .clk(clk),
       .q  (go_curr)
   );
@@ -44,6 +46,7 @@ module fact_top (
       .d  (we2_and_we0),
       .en (1),
       .rst(rst),
+      .clr(1'b0),
       .clk(clk),
       .q  (go_pulse_curr)
   );
@@ -60,6 +63,7 @@ module fact_top (
       .d  (done_next),
       .en (1),
       .rst(we2_and_we0),
+      .clr(1'b0),
       .clk(clk),
       .q  (done_curr)
   );
@@ -67,6 +71,7 @@ module fact_top (
       .d  (err_next),
       .en (1),
       .rst(we2_and_we0),
+      .clr(1'b0),
       .clk(clk),
       .q  (err_curr)
   );
@@ -74,11 +79,12 @@ module fact_top (
       .d  (nf_next),
       .en (done_next),
       .rst(rst),
+      .clr(1'b0),
       .clk(clk),
       .q  (nf_curr)
   );
   mux4 #(32) rd_mux (
-      .a  ({28'b0, nf_curr}),
+      .a  (n_curr),
       .b  ({31'b0, go_curr}),
       .c  ({30'b0, err_curr, done_curr}),
       .d  (nf_curr),

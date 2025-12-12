@@ -12,7 +12,12 @@ module fact_cu (
     output reg done,
     output reg error
 );
-  parameter logic S0 = 3'd0, S1 = 3'd1, S2 = 3'd2, S3 = 3'd3, S4 = 3'd4;
+  localparam logic [2:0]
+    S0 = 3'd0,
+    S1 = 3'd1,
+    S2 = 3'd2,
+    S3 = 3'd3,
+    S4 = 3'd4;
   reg [2:0] cs, ns;
 
   always @(posedge clk) begin

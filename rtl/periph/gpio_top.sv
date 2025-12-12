@@ -26,6 +26,7 @@ module gpio_top (
       .d  (wd),
       .en (we1),
       .rst(rst),
+      .clr(1'b0),
       .clk(clk),
       .q  (gpo1)
   );
@@ -33,6 +34,7 @@ module gpio_top (
       .d  (wd),
       .en (we2),
       .rst(rst),
+      .clr(1'b0),
       .clk(clk),
       .q  (gpo2)
   );

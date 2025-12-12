@@ -82,6 +82,7 @@ module datapath (
   dreg #(32) lo (
       .en (hilo_wee),
       .rst(rst),
+      .clr(1'b0),
       .clk(clk),
       .d  (mult_out[31:0]),
       .q  (lowd_rf)
@@ -90,6 +91,7 @@ module datapath (
   dreg #(32) hi (
       .en (hilo_wee),
       .rst(rst),
+      .clr(1'b0),
       .clk(clk),
       .d  (mult_out[63:32]),
       .q  (hiwd_rf)
@@ -107,6 +109,7 @@ module datapath (
       .a    (alu_pae),
       .b    (alu_pb),
       .shamt(shamte),
+      .zero (),
       .y    (alu_out)
   );
 
@@ -192,6 +195,7 @@ module datapath (
   dreg #(32) pc_reg (
       .en (!stall_f),
       .rst(rst),
+      .clr(1'b0),
       .clk(clk),
       .d  (pc_next),
       .q  (pc_current)

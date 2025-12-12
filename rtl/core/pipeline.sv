@@ -240,6 +240,7 @@ module pipeline (
       .d  (mem_next),
       .en (1'b1),
       .rst(rst),
+      .clr(1'b0),
       .clk(clk),
       .q  (mem_current)
   );
@@ -260,6 +261,7 @@ module pipeline (
       .d  (wb_next),
       .en (1'b1),
       .rst(rst),
+      .clr(1'b0),
       .clk(clk),
       .q  (wb_current)
   );

@@ -27,10 +27,19 @@ module mips_debounced_fpga (
   wire [31:0] gpo1;
   wire [31:0] gpo2;
   assign factErr = gpo1[0];
-
+  assign dispSe = gpo1[4];
+ 
+  // Power-on reset
+  reg [15:0] por_cnt = 0;
+  wire por_rst = (por_cnt != 16'hFFFF);
+  always @(posedge clk) begin
+    if (por_rst) por_cnt <= por_cnt + 1;
+  end
+  wire rst_internal = por_rst | rst;
+ 
   clk_gen clk_gen (
       .clk100MHz(clk),
-      .rst      (rst),
+      .rst      (rst_internal),
       .clk_4sec (clk_sec),
       .clk_5KHz (clk_5KHz)
   );
@@ -43,7 +52,7 @@ module mips_debounced_fpga (
 
   mips_soc dut (
       .clk       (clk_pb),
-      .rst       (rst),
+      .rst       (rst_internal),
       .gpi1      ({27'd0, switches[13:9]}),
       .ra3       (switches[4:0]),
       .rd3       (dispData),
@@ -54,7 +63,8 @@ module mips_debounced_fpga (
       .wd_dm     (wd_dm),
       .rd_dm     (rd_dm),
       .gpo1      (gpo1),
-      .gpo2      (gpo2)
+      .gpo2      (gpo2),
+      .we_dm     ()
   );
 
   hex_to_7seg hex3 (
@@ -79,7 +89,7 @@ module mips_debounced_fpga (
 
   led_mux led_mux (
       .clk   (clk_5KHz),
-      .rst   (rst),
+      .rst   (rst_internal),
       .LED3  (digit3),
       .LED2  (digit2),
       .LED1  (digit1),
