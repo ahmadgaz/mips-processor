@@ -7,9 +7,10 @@ module hazardunit (
     input wire       we_rege,
     input wire       we_regm,
     input wire       we_regw,
-    input wire [1:0] dm2rege,
+    input wire       lw_dm2rege,
     input wire [1:0] dm2regm,
-    input wire [31:0] instrd,
+    input wire [ 4:0] rsd,
+    input wire [ 4:0] rtd,
     input wire        branch,
     input wire        j_src,
 
@@ -21,10 +22,6 @@ module hazardunit (
     output wire       stall_d,
     output wire       flush_e
 );
-
-  wire [4:0] rsd = instrd[25:21];
-  wire [4:0] rtd = instrd[20:16];
-
   assign forward_ae =  // EX stage needs forwarding from MEM and WB
       ((rse != 5'd0) && (rse == rf_wam) && we_regm) ? 2'b10 :  // Logic
       ((rse != 5'd0) && (rse == rf_waw) && we_regw) ? 2'b01 :  // Logic || Memory
@@ -41,7 +38,7 @@ module hazardunit (
   assign forward_bd = (rtd != 5'd0) && (rtd == rf_wam) && we_regm;
 
   wire lwstall = // Instrs need one stage of seperation
-    ((rsd == rte) || (rtd == rte)) && dm2rege[0];
+    ((rsd == rte) || (rtd == rte)) && lw_dm2rege;
 
   wire branchstall =
         (branch && we_rege && // Logic needs one stage of seperation -> forwarding

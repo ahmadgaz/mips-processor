@@ -127,7 +127,10 @@ module mips_core (
       .rd_dmw     (rd_dmw),
       .awd_rfw    (awd_rfw),
       .stall_f    (stall_f),
-      .instrd     (instrd),
+      .target     (instrd[25:0]),
+      .immediate  (instrd[15:0]),
+      .ra1        (instrd[25:21]),
+      .ra2        (instrd[20:16]),
       .pc_current (pc_current),
       .rd3        (rd3),
       .ra3        (ra3)
@@ -149,9 +152,10 @@ module mips_core (
       .we_rege   (we_rege),
       .we_regm   (we_regm),
       .we_regw   (we_regw),
-      .dm2rege   (dm2rege),
+      .lw_dm2rege   (dm2rege[0]),
       .dm2regm   (dm2regm),
-      .instrd    (instrd),
+      .rsd       (instrd[25:21]),
+      .rtd       (instrd[20:16]),
       .branch    (branch),
       .j_src     (j_src)
   );

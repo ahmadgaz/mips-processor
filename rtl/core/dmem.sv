@@ -7,17 +7,18 @@ module dmem (
     input  wire        rst
 );
   reg [31:0] ram[64];
-  integer n;
+  integer i;
 
-  initial begin
-    for (n = 0; n < 64; n = n + 1) ram[n] = 32'hFFFFFFFF;
+  always @(posedge clk) begin
+    if (rst) begin
+      for (i = 0; i < 32; i = i + 1)
+        ram[i] = 32'hFFFFFFFF;
+    end
+    else if (we) begin
+      ram[a] <= d;
+    end
   end
-
-  always @(posedge clk, posedge rst) begin
-    if (rst) for (n = 0; n < 64; n = n + 1) ram[n] = 32'hFFFFFFFF;
-    else if (we) ram[a] <= d;
-  end
-
+  
   assign q = ram[a];
 endmodule
 

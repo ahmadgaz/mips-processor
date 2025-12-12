@@ -9,7 +9,10 @@ module datapath (
     input wire [31:0] rd_dmw,
     input wire [ 4:0] rte,
     input wire [ 4:0] rde,
-    input wire [31:0] instrd,
+    input wire [25:0] target, //instrd[25:0]
+    input wire [15:0] immediate, //instrd[15:0]
+    input wire [ 4:0] ra1, //instrd[25:21]
+    input wire [ 4:0] ra2, //instrd[20:16]
     input wire [ 4:0] ra3,
     input wire [31:0] rd1_rfd,
     input wire [31:0] pc_plus4d,
@@ -71,7 +74,7 @@ module datapath (
   assign ba  = {sext_imm[29:0], 2'b0};
 
   // Jump target address: {PC+4[31:28], instr[25:0], 2'b00}
-  assign jta = {pc_plus4d[31:28], instrd[25:0], 2'b0};
+  assign jta = {pc_plus4d[31:28], target, 2'b0};
 
   mult #(32) mult (
       .a(alu_pae),
@@ -141,7 +144,7 @@ module datapath (
       .INWIDTH (16),
       .OUTWIDTH(32)
   ) se (
-      .a(instrd[15:0]),
+      .a(immediate),
       .y(sext_imm)
   );
 
@@ -150,8 +153,8 @@ module datapath (
       .clk(clk),
       .we (we_regw),
       .rd3(rd3),
-      .ra1(instrd[25:21]),
-      .ra2(instrd[20:16]),
+      .ra1(ra1),
+      .ra2(ra2),
       .ra3(ra3),
       .wa (rf_waw),
       .wd (wd_rf),

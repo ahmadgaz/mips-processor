@@ -7,20 +7,20 @@ module mips_ad (
     output reg  [ 1:0] rdsel
 );
   always_comb begin
-    case (a[31:8])
-      24'h000000: begin
+    casez (a)
+      32'h000000??: begin
         we1   = 1'b0;
         we2   = 1'b0;
         wem   = we;
         rdsel = 2'b00;
       end
-      24'h000008: begin
+      32'h000008??: begin
         we1   = we;
         we2   = 1'b0;
         wem   = 1'b0;
         rdsel = 2'b10;
       end
-      24'h000009: begin
+      32'h000009??: begin
         we1   = 1'b0;
         we2   = we;
         wem   = 1'b0;
