@@ -3,6 +3,7 @@ set_property -dict {PACKAGE_PIN W5 IOSTANDARD LVCMOS33}           [get_ports {cl
 create_clock -add -name sys_clk_pin -period 10.00 -waveform {0 5} [get_ports {clk}];
 
 # Buttons
+set_property -dict {PACKAGE_PIN U18 IOSTANDARD LVCMOS33} [get_ports {button}]; # Center Button
 set_property -dict {PACKAGE_PIN W19 IOSTANDARD LVCMOS33} [get_ports {rst}]; # Left Button
 
 # Switches
@@ -11,6 +12,15 @@ set_property -dict {PACKAGE_PIN V16 IOSTANDARD LVCMOS33} [get_ports {switches[1]
 set_property -dict {PACKAGE_PIN W16 IOSTANDARD LVCMOS33} [get_ports {switches[2]}];  # Switch 2
 set_property -dict {PACKAGE_PIN W17 IOSTANDARD LVCMOS33} [get_ports {switches[3]}];  # Switch 3
 set_property -dict {PACKAGE_PIN W15 IOSTANDARD LVCMOS33} [get_ports {switches[4]}];  # Switch 4
+set_property -dict {PACKAGE_PIN V15 IOSTANDARD LVCMOS33} [get_ports {switches[5]}];  # Switch 5
+set_property -dict {PACKAGE_PIN W14 IOSTANDARD LVCMOS33} [get_ports {switches[6]}];  # Switch 6
+set_property -dict {PACKAGE_PIN W13 IOSTANDARD LVCMOS33} [get_ports {switches[7]}];  # Switch 7
+set_property -dict {PACKAGE_PIN V2  IOSTANDARD LVCMOS33} [get_ports {switches[8]}];  # Switch 8
+set_property -dict {PACKAGE_PIN T3  IOSTANDARD LVCMOS33} [get_ports {switches[9]}];  # Switch 9
+set_property -dict {PACKAGE_PIN T2  IOSTANDARD LVCMOS33} [get_ports {switches[10]}]; # Switch 10
+set_property -dict {PACKAGE_PIN R3  IOSTANDARD LVCMOS33} [get_ports {switches[11]}]; # Switch 11
+set_property -dict {PACKAGE_PIN W2  IOSTANDARD LVCMOS33} [get_ports {switches[12]}]; # Switch 12
+set_property -dict {PACKAGE_PIN U1  IOSTANDARD LVCMOS33} [get_ports {switches[13]}]; # Switch 13
 
 # LEDs
 set_property -dict {PACKAGE_PIN U16 IOSTANDARD LVCMOS33} [get_ports {factErr}];  # LED 0

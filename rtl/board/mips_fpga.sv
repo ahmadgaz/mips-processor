@@ -1,7 +1,7 @@
 module mips_fpga (
     input  wire       clk,
     input  wire       rst,
-    input  wire [5:0] switches,
+    input  wire [4:0] switches,
     output wire       factErr,
     output wire       dispSe,
     output wire [3:0] LEDSEL,
