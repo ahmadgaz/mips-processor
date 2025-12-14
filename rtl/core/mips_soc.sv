@@ -56,31 +56,31 @@ module mips_soc (
       .q  (rd_dm)
   );
   fact_top fact (
+      .clk(clk),
+      .rst(rst),
       .a  (alu_out[3:2]),
       .we (we1),
       .wd (wd_dm[3:0]),
-      .rst(rst),
-      .clk(clk),
       .rd (rd_fact)
   );
   gpio_top gpio (
+      .clk(clk),
+      .rst(rst),
       .a(alu_out[3:2]),
       .we(we2),
       .wd(wd_dm),
       .gpi1(gpi1),
       .gpi2(gpi2),
-      .rst(rst),
-      .clk(clk),
       .rd(rd_gpio),
       .gpo1(gpo1),
       .gpo2(gpo2)
   );
   mux4 #(32) rd_mux (
+      .sel(rdsel),
       .a  (rd_dm),
       .b  (rd_dm),
       .c  (rd_fact),
       .d  (rd_gpio),
-      .sel(rdsel),
       .y  (rd)
   );
 endmodule

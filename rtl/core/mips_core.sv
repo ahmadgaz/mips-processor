@@ -45,7 +45,6 @@ module mips_core (
   wire [ 4:0] shamte;
   wire [31:0] lowd_rfm;
   wire [31:0] hiwd_rfm;
-  wire [31:0] alu_outm;
   wire [ 4:0] rf_waw;
   wire [31:0] sext_imme;
   wire [31:0] wd_dme;
@@ -70,11 +69,13 @@ module mips_core (
   wire        we_regm;
   wire [ 1:0] dm2rege;
   wire [ 1:0] dm2regm;
-  assign alu_out = alu_outm;
 
   controlunit cu (
-      .opcode    (instrd[31:26]),
-      .funct     (instrd[5:0]),
+      // Inputs
+      .opcode(instrd[31:26]),
+      .funct (instrd[5:0]),
+
+      // Outputs
       .branch    (branch),
       .reg_dst   (reg_dst),
       .we_reg    (we_reg),
@@ -89,20 +90,11 @@ module mips_core (
   );
 
   datapath dp (
+      // Inputs
       .clk        (clk),
       .rst        (rst),
       .jump       (jump),
       .j_src      (j_src),
-      .pc_plus4   (pc_plus4),
-      .rd1_rf     (rd1_rf),
-      .rd2_rf     (rd2_rf),
-      .sext_imm   (sext_imm),
-      .wd_rf      (wd_rf),
-      .alu_out    (alu_out_dp),
-      .lowd_rf    (lowd_rf),
-      .hiwd_rf    (hiwd_rf),
-      .rf_wa      (rf_wa),
-      .awd_rf     (awd_rf),
       .hilo_wee   (hilo_wee),
       .alu_srce   (alu_srce),
       .alu_ctrle  (alu_ctrle),
@@ -114,7 +106,7 @@ module mips_core (
       .shamte     (shamte),
       .lowd_rfm   (lowd_rfm),
       .hiwd_rfm   (hiwd_rfm),
-      .alu_outm   (alu_outm),
+      .alu_outm   (alu_out),
       .rf_waw     (rf_waw),
       .sext_imme  (sext_imme),
       .wd_dme     (wd_dme),
@@ -127,16 +119,29 @@ module mips_core (
       .rd_dmw     (rd_dmw),
       .awd_rfw    (awd_rfw),
       .stall_f    (stall_f),
-      .target     (instrd[25:0]),
-      .immediate  (instrd[15:0]),
-      .ra1        (instrd[25:21]),
-      .ra2        (instrd[20:16]),
-      .pc_current (pc_current),
-      .rd3        (rd3),
-      .ra3        (ra3)
+      .targetd    (instrd[25:0]),
+      .immd       (instrd[15:0]),
+      .ra1d       (instrd[25:21]),
+      .ra2d       (instrd[20:16]),
+      .ra3        (ra3),
+
+      // Outputs
+      .pc_plus4  (pc_plus4),
+      .rd1_rf    (rd1_rf),
+      .rd2_rf    (rd2_rf),
+      .sext_imm  (sext_imm),
+      .wd_rf     (wd_rf),
+      .alu_out   (alu_out_dp),
+      .lowd_rf   (lowd_rf),
+      .hiwd_rf   (hiwd_rf),
+      .rf_wa     (rf_wa),
+      .awd_rf    (awd_rf),
+      .pc_current(pc_current),
+      .rd3       (rd3)
   );
 
   hazardunit hu (
+      // Outputs
       .stall_f   (stall_f),
       .forward_ae(forward_ae),
       .forward_be(forward_be),
@@ -144,15 +149,17 @@ module mips_core (
       .forward_bd(forward_bd),
       .stall_d   (stall_d),
       .flush_e   (flush_e),
+
+      // Inputs
+      .rf_waw    (rf_waw),
+      .we_regw   (we_regw),
       .rse       (rse),
       .rte       (rte),
       .rf_wae    (rf_wa),
       .rf_wam    (rf_wam),
-      .rf_waw    (rf_waw),
       .we_rege   (we_rege),
       .we_regm   (we_regm),
-      .we_regw   (we_regw),
-      .lw_dm2rege   (dm2rege[0]),
+      .lw_dm2rege(dm2rege[0]),
       .dm2regm   (dm2regm),
       .rsd       (instrd[25:21]),
       .rtd       (instrd[20:16]),
@@ -161,47 +168,54 @@ module mips_core (
   );
 
   pipeline pl (
-      .jump       (jump),
-      .j_src      (j_src),
-      .clk        (clk),
-      .rst        (rst),
-      .instr      (instr),
-      .rd_dm      (rd_dm),
+      // Inputs
+      .clk       (clk),
+      .rst       (rst),
+      .instr     (instr),
+      .rd_dm     (rd_dm),
+      .branch    (branch),
+      .reg_dst   (reg_dst),
+      .we_reg    (we_reg),
+      .alu_src   (alu_src),
+      .dm2reg    (dm2reg),
+      .alu_ctrl  (alu_ctrl),
+      .rf_awd_src(rf_awd_src),
+      .hilo_we   (hilo_we),
+      .we_dm     (we_dm_cu),
+      .jump      (jump),
+      .j_src     (j_src),
+      .pc_plus4  (pc_plus4),
+      .rd1_rf    (rd1_rf),
+      .rd2_rf    (rd2_rf),
+      .sext_imm  (sext_imm),
+      .wd_rf     (wd_rf),
+      .alu_out   (alu_out_dp),
+      .lowd_rf   (lowd_rf),
+      .hiwd_rf   (hiwd_rf),
+      .awd_rf    (awd_rf),
+      .rf_wa     (rf_wa),
+      .forward_ae(forward_ae),
+      .forward_be(forward_be),
+      .forward_ad(forward_ad),
+      .forward_bd(forward_bd),
+      .stall_d   (stall_d),
+      .flush_e   (flush_e),
+
+      // Outputs
+      .alu_outm   (alu_out),
       .wd_dmm     (wd_dm),
       .we_dmm     (we_dm),
       .instrd     (instrd),
-      .branch     (branch),
-      .reg_dst    (reg_dst),
-      .we_reg     (we_reg),
-      .alu_src    (alu_src),
-      .dm2reg     (dm2reg),
-      .alu_ctrl   (alu_ctrl),
-      .rf_awd_src (rf_awd_src),
-      .hilo_we    (hilo_we),
-      .we_dm      (we_dm_cu),
-      .pc_plus4   (pc_plus4),
-      .rd1_rf     (rd1_rf),
-      .rd2_rf     (rd2_rf),
-      .sext_imm   (sext_imm),
-      .wd_rf      (wd_rf),
-      .alu_out    (alu_out_dp),
-      .lowd_rf    (lowd_rf),
-      .hiwd_rf    (hiwd_rf),
-      .rf_wa      (rf_wa),
-      .awd_rf     (awd_rf),
       .hilo_wee   (hilo_wee),
       .alu_srce   (alu_srce),
       .alu_ctrle  (alu_ctrle),
       .rf_awd_srcm(rf_awd_srcm),
       .dm2regw    (dm2regw),
       .reg_dste   (reg_dste),
-      .we_regw    (we_regw),
       .pc_src     (pc_src),
       .shamte     (shamte),
       .lowd_rfm   (lowd_rfm),
       .hiwd_rfm   (hiwd_rfm),
-      .alu_outm   (alu_outm),
-      .rf_waw     (rf_waw),
       .sext_imme  (sext_imme),
       .wd_dme     (wd_dme),
       .alu_pae    (alu_pae),
@@ -209,20 +223,16 @@ module mips_core (
       .pc_plus4d  (pc_plus4d),
       .rd1_rfd    (rd1_rfd),
       .rde        (rde),
-      .rte        (rte),
       .rd_dmw     (rd_dmw),
       .awd_rfw    (awd_rfw),
-      .forward_ae (forward_ae),
-      .forward_be (forward_be),
-      .forward_ad (forward_ad),
-      .forward_bd (forward_bd),
-      .stall_d    (stall_d),
-      .flush_e    (flush_e),
+      .rte        (rte),
+      .we_regw    (we_regw),
+      .rf_waw     (rf_waw),
       .rse        (rse),
       .rf_wam     (rf_wam),
       .we_rege    (we_rege),
       .we_regm    (we_regm),
-      .dm2rege    (dm2rege),
-      .dm2regm    (dm2regm)
+      .dm2regm    (dm2regm),
+      .dm2rege    (dm2rege)
   );
 endmodule
