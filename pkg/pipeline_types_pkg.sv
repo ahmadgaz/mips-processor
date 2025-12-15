@@ -41,7 +41,7 @@ package pipeline_types_pkg;
     logic [31:0] awd_rf;
     logic        we_reg;
     logic [1:0]  dm2reg;
-    logic [1:0]  rf_wa;
+    logic [4:0]  rf_wa;
     logic [31:0] pc_plus4;
   } wb_pipe_t;
 endpackage
