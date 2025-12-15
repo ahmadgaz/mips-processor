@@ -1,48 +1,4 @@
-typedef struct packed {
-  logic [31:0] instr;
-  logic [31:0] pc_plus4;
-} id_pipe_t;
-
-typedef struct packed {
-  logic        we_reg;
-  logic [1:0]  dm2reg;
-  logic        we_dm;
-  logic [1:0]  rf_awd_src;
-  logic [2:0]  alu_ctrl;
-  logic        alu_src;
-  logic [1:0]  reg_dst;
-  logic        hilo_we;
-  logic [31:0] rd1_rf;
-  logic [31:0] rd2_rf;
-  logic [31:0] sext_imm;
-  logic [4:0]  rs;
-  logic [4:0]  rt;
-  logic [4:0]  rd;
-  logic [4:0]  shamt;
-  logic [31:0] pc_plus4;
-} exe_pipe_t;
-
-typedef struct packed {
-  logic [31:0] alu_out;
-  logic [31:0] lowd_rf;
-  logic [31:0] hiwd_rf;
-  logic [4:0]  rf_wa;
-  logic        we_reg;
-  logic [1:0]  dm2reg;
-  logic        we_dm;
-  logic [1:0]  rf_awd_src;
-  logic [31:0] wd_dm;
-  logic [31:0] pc_plus4;
-} mem_pipe_t;
-
-typedef struct packed {
-  logic [31:0] rd_dm;
-  logic [31:0] awd_rf;
-  logic        we_reg;
-  logic [1:0]  dm2reg;
-  logic [1:0]  rf_wa;
-  logic [31:0] pc_plus4;
-} wb_pipe_t;
+import pipeline_types_pkg::*;
 
 module pipeline (
     input wire clk,
@@ -150,6 +106,11 @@ module pipeline (
   mem_pipe_t mem_next, mem_current;
   wb_pipe_t wb_next, wb_current;
 
+  logic [$bits(id_pipe_t)-1:0] id_next_flat, id_current_flat;
+  logic [$bits(exe_pipe_t)-1:0] exe_next_flat, exe_current_flat;
+  logic [$bits(mem_pipe_t)-1:0] mem_next_flat, mem_current_flat;
+  logic [$bits(wb_pipe_t)-1:0] wb_next_flat, wb_current_flat;
+
   wire        we_dme;
   wire [31:0] rd2_rfd;
   wire        cmp_out;
@@ -171,6 +132,9 @@ module pipeline (
   assign cmp_out   = rd1_rfd == rd2_rfd;
   assign pc_src    = branch && cmp_out;
 
+  assign id_next_flat = id_next;
+  assign id_current   = id_current_flat;
+
   dreg #($bits(
       id_pipe_t
   )) id (
@@ -178,8 +142,8 @@ module pipeline (
       .rst(rst),
       .clr(jump | j_src | pc_src),
       .clk(clk),
-      .d  (id_next),
-      .q  (id_current)
+      .d  (id_next_flat),
+      .q  (id_current_flat)
   );
   mux2 #(32) rd1_rf_mux (
       .sel(forward_ad),
@@ -232,6 +196,9 @@ module pipeline (
   assign shamte      = exe_current.shamt;
   assign pc_plus4e   = exe_current.pc_plus4;
 
+  assign exe_next_flat = exe_next;
+  assign exe_current   = exe_current_flat;
+
   dreg #($bits(
       exe_pipe_t
   )) exe (
@@ -239,8 +206,8 @@ module pipeline (
       .rst(rst),
       .clr(flush_e),
       .clk(clk),
-      .d  (exe_next),
-      .q  (exe_current)
+      .d  (exe_next_flat),
+      .q  (exe_current_flat)
   );
   mux3 #(32) rd1_rfe_mux (
       .sel(forward_ae),
@@ -283,6 +250,9 @@ module pipeline (
   assign wd_dmm      = mem_current.wd_dm;
   assign pc_plus4m   = mem_current.pc_plus4;
 
+  assign mem_next_flat = mem_next;
+  assign mem_current   = mem_current_flat;
+
   dreg #($bits(
       mem_pipe_t
   )) mem (
@@ -290,20 +260,20 @@ module pipeline (
       .rst(rst),
       .clr(1'b0),
       .clk(clk),
-      .d  (mem_next),
-      .q  (mem_current)
+      .d  (mem_next_flat),
+      .q  (mem_current_flat)
   );
 
   // ------------------------
   // Writeback stage
   // ------------------------
   always_comb begin
-    wb_next.rd_dm    rd_dm;  // 32b
-    wb_next.awd_rf   awd_rf;  // 32b
-    wb_next.we_reg   we_regm;  // 1b
-    wb_next.dm2reg   dm2regm;  // 2b
-    wb_next.rf_wa    rf_wam;  // 5b
-    wb_next.pc_plus4 pc_plus4m;  // 32b
+    wb_next.rd_dm    = rd_dm;  // 32b
+    wb_next.awd_rf   = awd_rf;  // 32b
+    wb_next.we_reg   = we_regm;  // 1b
+    wb_next.dm2reg   = dm2regm;  // 2b
+    wb_next.rf_wa    = rf_wam;  // 5b
+    wb_next.pc_plus4 = pc_plus4m;  // 32b
   end
   assign rd_dmw    = wb_current.rd_dm;
   assign awd_rfw   = wb_current.awd_rf;
@@ -312,6 +282,9 @@ module pipeline (
   assign rf_waw    = wb_current.rf_wa;
   assign pc_plus4w = wb_current.pc_plus4;
 
+  assign wb_next_flat = wb_next;
+  assign wb_current   = wb_current_flat;
+
   dreg #($bits(
       wb_pipe_t
   )) wb (
@@ -319,8 +292,8 @@ module pipeline (
       .rst(rst),
       .clr(1'b0),
       .clk(clk),
-      .d  (wb_next),
-      .q  (wb_current)
+      .d  (wb_next_flat),
+      .q  (wb_current_flat)
   );
 
 
