@@ -3,9 +3,13 @@ module imem (
     output wire [31:0] y
 );
   reg [31:0] rom[64];
+  string memfile;
 
   initial begin
-    $readmemh("memfile.dat", rom);
+    if (!$value$plusargs("MEMFILE=%s", memfile)) begin
+      $fatal(1, "[IMEM] Must include +MEMFILE argument");
+    end
+    $readmemh(memfile, rom);
   end
 
   assign y = rom[a];
