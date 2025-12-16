@@ -44,7 +44,7 @@ module fact_top (
   );
   dreg #(1) go_pulse_reg (
       .d  (we2_and_we0),
-      .en (1),
+      .en (1'b1),
       .rst(rst),
       .clr(1'b0),
       .clk(clk),
@@ -61,7 +61,7 @@ module fact_top (
   );
   dreg #(1) done_reg (
       .d  (done_next),
-      .en (1),
+      .en (1'b1),
       .rst(we2_and_we0),
       .clr(1'b0),
       .clk(clk),
@@ -69,7 +69,7 @@ module fact_top (
   );
   dreg #(1) err_reg (
       .d  (err_next),
-      .en (1),
+      .en (1'b1),
       .rst(we2_and_we0),
       .clr(1'b0),
       .clk(clk),

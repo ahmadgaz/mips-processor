@@ -66,7 +66,8 @@ foreach hex $hex_files {
 
   # Elaborate (unique sim snapshot per test)
   set snapshot "sim_${base}"
-  exec xelab tb_mips_soc -debug typical -s $snapshot
+  exec xelab tb_mips_soc -debug typical -s $snapshot \
+    -timescale 1ns/1ps -override_timeunit -override_timeprecision
 
   # Run simulation
   set result ""
