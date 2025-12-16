@@ -37,7 +37,7 @@ proc findFiles { baseDir pattern } {
 }
 
 set rtl_files [findFiles "rtl" "*.sv"]
-lappend rtl_files [findFiles "pkg" "*.sv"]
+lappend rtl_files {*}[findFiles "pkg" "*.sv"]
 add_files $rtl_files
 add_files sim/tb_mips_soc.sv
 set_property top tb_mips_soc [get_filesets sim_1]
