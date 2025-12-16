@@ -26,7 +26,7 @@ module mips_fpga (
   wire [31:0] gpo2;
   assign factErr = gpo1[0];
   assign dispSe = gpo1[4];
-  
+
   // Power-on reset
   reg [15:0] por_cnt = 0;
   wire por_rst = (por_cnt != 16'hFFFF);
