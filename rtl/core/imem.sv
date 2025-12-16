@@ -5,7 +5,7 @@ module imem (
   reg [31:0] rom[64];
 
   initial begin
-    $readmemh("memfile.dat", rom);
+    $readmemh("imem.hex", rom);
   end
 
   assign y = rom[a];
