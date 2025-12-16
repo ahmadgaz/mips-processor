@@ -68,12 +68,12 @@ foreach hex $hex_files {
 
   # Elaborate (unique sim snapshot per test)
   set snapshot "sim_${base}"
-  xelab tb_mips_soc -debug typical -s $snapshot
+  exec xelab tb_mips_soc -debug typical -s $snapshot
 
   # Run simulation
   set result ""
   set rc [catch {
-    xsim $snapshot -runall \
+    exec xsim $snapshot -runall \
       -testplusarg "EXPECT=$exp" \
       -testplusarg "VERBOSE=1" \
       -testplusarg "WAVES=1"
