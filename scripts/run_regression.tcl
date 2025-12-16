@@ -36,12 +36,9 @@ proc findFiles { baseDir pattern } {
   return $all_files
 }
 
-set rtl_files [findFiles "rtl" "*.sv"]
-lappend rtl_files {*}[findFiles "pkg" "*.sv"]
-add_files $rtl_files
-add_files sim/tb_mips_soc.sv
-set_property top tb_mips_soc [get_filesets sim_1]
-exec xvlog -sv -work work {*}$rtl_files sim/tb_mips_soc.sv
+set pkg_files [lsort [findFiles "pkg" "*.sv"]]
+set rtl_files [lsort [findFiles "rtl" "*.sv"]]
+exec xvlog -sv -work work {*}$pkg_files {*}$rtl_files sim/tb_mips_soc.sv
 
 # -----------------------------
 # Regression loop
