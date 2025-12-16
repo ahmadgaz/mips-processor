@@ -24,7 +24,21 @@ puts "Found [llength $hex_files] test(s) in $TEST_DIR"
 # -----------------------------
 create_project -in_memory -part xc7a35tcpg236-1
 
-add_files [glob -nocomplain -recursive rtl *.sv]
+proc findFiles { baseDir pattern } {
+  set all_files {}
+  set contents [glob -nocomplain -directory $baseDir *]
+  foreach item $contents {
+    if {[file isdirectory $item]} {
+      lappend all_files {*}[findFiles $item $pattern]
+    }
+  }
+  lappend all_files {*}[glob -nocomplain -directory $baseDir -types f $pattern]
+  return $all_files
+}
+
+set basepath "rtl"
+add_files [findFiles $basepath "*.sv"]
+
 add_files sim/tb_mips_soc.sv
 set_property top tb_mips_soc [get_filesets sim_1]
 
