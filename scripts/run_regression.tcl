@@ -79,7 +79,7 @@ foreach hex $hex_files {
   } result]
 
   # Detect failure (catch nonzero OR look for FATAL)
-  if {$rc != 0 || [string match "*FATAL*" $result]} {
+  if {$rc != 0 || [string match "*FATAL*" [string toupper $result]]} {
     puts "(E) TEST FAILED: $base"
     puts "---- xsim output ----"
     puts $result
