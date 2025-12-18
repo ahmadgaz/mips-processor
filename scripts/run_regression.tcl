@@ -1,8 +1,12 @@
 # -----------------------------
 # Configuration
 # -----------------------------
-set TEST_DIR  "sim/tests"
+set REGDIR "regression"
+set TEST_DIR  "../sim/tests"
 set MEMFILE   "imem.hex"
+
+file mkdir $REGDIR
+cd $REGDIR
 
 # Fail fast if any test fails
 set failed 0
@@ -36,9 +40,9 @@ proc findFiles { baseDir pattern } {
   return $all_files
 }
 
-set pkg_files [lsort [findFiles "pkg" "*.sv"]]
-set rtl_files [lsort [findFiles "rtl" "*.sv"]]
-exec xvlog -sv -work work {*}$pkg_files {*}$rtl_files sim/tb_mips_soc.sv
+set pkg_files [lsort [findFiles "../pkg" "*.sv"]]
+set rtl_files [lsort [findFiles "../rtl" "*.sv"]]
+exec xvlog -sv -work work {*}$pkg_files {*}$rtl_files ../sim/tb_mips_soc.sv
 
 # -----------------------------
 # Regression loop
