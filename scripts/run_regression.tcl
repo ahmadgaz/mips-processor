@@ -2,7 +2,7 @@
 # Configuration
 # -----------------------------
 set TEST_DIR  "sim/tests"
-set MEMFILE   "sim/imem.hex"
+set MEMFILE   "imem.hex"
 
 # Fail fast if any test fails
 set failed 0
