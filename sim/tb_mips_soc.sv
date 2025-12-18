@@ -203,6 +203,7 @@ module tb_mips_soc;
 
     reset_dut();
     run_until_halt();
+    repeat (5) @(posedge clk);  // Let pipeline drain / WB commit
     check_all_expected_regs();
 
     $display("[TB] PASS");
