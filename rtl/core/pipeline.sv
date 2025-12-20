@@ -310,7 +310,7 @@ module pipeline (
   always @(pc_src) begin
     $display("%t: pipeline pc_src=%b", $time, pc_src);
   end
-  always @(rst | jump | j_src | pc_src) begin
+  always @(rst, jump, j_src, pc_src) begin
     $display("%t: id dreg instance rst=%b", $time, rst | jump | j_src | pc_src);
   end
 `endif

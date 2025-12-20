@@ -1,0 +1,7 @@
+regression/
+xsim.dir/
+*.wdb
+*.vcd
+*.jou
+*.log
+*.pb
