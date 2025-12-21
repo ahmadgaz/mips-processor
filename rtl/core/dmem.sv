@@ -18,7 +18,7 @@ module dmem (
       ram[a] <= d;
     end
   end
-  
+
   assign q = ram[a];
 endmodule
 

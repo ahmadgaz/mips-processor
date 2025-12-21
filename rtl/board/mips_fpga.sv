@@ -8,8 +8,6 @@ module mips_fpga (
     output wire [7:0] LEDOUT
 );
   wire [15:0] reg_hex;
-  wire        clk_sec;
-  wire        clk_5KHz;
 
   wire [ 7:0] digit0;
   wire [ 7:0] digit1;
@@ -35,15 +33,8 @@ module mips_fpga (
   end
   wire rst_internal = por_rst | rst;
 
-  clk_gen clk_gen (
-      .clk100MHz(clk),
-      .rst      (rst_internal),
-      .clk_4sec (clk_sec),
-      .clk_5KHz (clk_5KHz)
-  );
-
   mips_soc dut (
-      .clk       (clk_5KHz),
+      .clk       (clk),
       .rst       (rst_internal),
       .ra3       (5'b0),
       .gpi1      ({27'd0, switches[4:0]}),
@@ -87,7 +78,7 @@ module mips_fpga (
   );
 
   led_mux led_mux (
-      .clk   (clk_5KHz),
+      .clk   (clk),
       .rst   (rst_internal),
       .LED3  (digit3),
       .LED2  (digit2),
