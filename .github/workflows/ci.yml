@@ -29,4 +29,4 @@ jobs:
         shell: bash
         run: |
           source /home/ahmad/Xilinx/2025.2/Vivado/settings64.sh
-          vivado -mode batch -notrace -source scripts/run_regression.tcl
+          vivado -mode batch -notrace -source scripts/regression.tcl
