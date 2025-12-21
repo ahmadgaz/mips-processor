@@ -1,0 +1,32 @@
+name: mips-ci
+
+on:
+  push:
+    branches: [ main, dev ]
+  workflow_dispatch:
+
+jobs:
+  ci:
+    runs-on: [self-hosted, vivado, mips-ci]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Vivado env
+        shell: bash
+        run: |
+          source /home/ahmad/Xilinx/2025.2/Vivado/settings64.sh
+          vivado -version
+
+      - name: Lint
+        shell: bash
+        run: |
+          source /home/ahmad/Xilinx/2025.2/Vivado/settings64.sh
+          vivado -mode batch -notrace -source scripts/lint.tcl
+
+      - name: Regression simulation
+        shell: bash
+        run: |
+          source /home/ahmad/Xilinx/2025.2/Vivado/settings64.sh
+          vivado -mode batch -notrace -source scripts/run_regression.tcl
