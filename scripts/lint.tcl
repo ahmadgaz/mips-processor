@@ -54,14 +54,14 @@ if {$rc != 0} {
   exit 1
 }
 
-set msgs [get_messages -severity WARNING CRITICAL_WARNING ERROR]
-if {[llength $msgs] > 0} {
-  puts stderr "\nLINT FAILED: found [llength $msgs] WARNING/CRITICAL_WARNING/ERROR message(s)"
-  puts "---- messages ----"
-  foreach m $msgs {
-    puts stderr [get_property MESSAGE_TEXT $m]
-  }
-  puts "------------------"
+set n_err [get_msg_config -count -severity {ERROR}]
+set n_cw  [get_msg_config -count -severity {CRITICAL WARNING}]
+set n_w   [get_msg_config -count -severity {WARNING}]
+puts "Message counts: ERROR=$n_err  CRITICAL_WARNING=$n_cw  WARNING=$n_w"
+
+set n_msg [expr {$n_err + $n_cw + $n_w}]
+if {$n_msg > 0} {
+  puts stderr "\nLINT FAILED: found $n_msg WARNING/CRITICAL_WARNING/ERROR message(s)"
   exit 1
 }
 
