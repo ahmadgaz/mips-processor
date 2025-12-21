@@ -1,5 +1,5 @@
 lint/
-run_regression/
+regression/
 xsim.dir/
 *.wdb
 *.vcd
