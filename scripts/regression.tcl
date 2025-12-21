@@ -1,18 +1,16 @@
 # -----------------------------
-# Configuration
+# Config
 # -----------------------------
-set REGDIR "regression"
 set TEST_DIR  "../sim/tests"
 set MEMFILE   "imem.hex"
-
-file mkdir $REGDIR
-cd $REGDIR
-
-# Fail fast if any test fails
 set failed 0
 
+set OUTDIR "regression"
+file mkdir $OUTDIR
+cd $OUTDIR
+
 # -----------------------------
-# Collect tests: all .hex in sim/tests, sorted
+# Collect all .hex in sim/tests sorted
 # -----------------------------
 set hex_files [lsort [glob -nocomplain -directory $TEST_DIR *.hex]]
 
@@ -24,7 +22,7 @@ if {[llength $hex_files] == 0} {
 puts "Found [llength $hex_files] test(s) in $TEST_DIR"
 
 # -----------------------------
-# Create project (in-memory)
+# Create project in-memory
 # -----------------------------
 create_project -in_memory -part xc7a35tcpg236-1
 
@@ -42,7 +40,8 @@ proc findFiles { baseDir pattern } {
 
 set pkg_files [lsort [findFiles "../pkg" "*.sv"]]
 set rtl_files [lsort [findFiles "../rtl" "*.sv"]]
-exec xvlog -sv -work work {*}$pkg_files {*}$rtl_files ../sim/tb_mips_soc.sv
+set sim_files [lsort [findFiles "../sim" "*.sv"]]
+exec xvlog -sv -work work {*}$pkg_files {*}$rtl_files {*}$sim_files
 
 # -----------------------------
 # Regression loop
@@ -68,7 +67,7 @@ foreach hex $hex_files {
   # Copy program into memfile (RTL-compatible)
   file copy -force $hex $MEMFILE
 
-  # Elaborate (unique sim snapshot per test)
+  # Elaborate
   set snapshot "sim_${base}"
   exec xelab tb_mips_soc -debug typical -s $snapshot \
     -timescale 1ns/1ps -override_timeunit -override_timeprecision
@@ -82,14 +81,13 @@ foreach hex $hex_files {
       -testplusarg "WAVES=1"
   } result]
 
-  # Detect failure (catch nonzero OR look for FATAL)
+  # Detect failure
   if {$rc != 0 || [string match "*FATAL*" [string toupper $result]]} {
     puts "(E) TEST FAILED: $base"
     puts "---- xsim output ----"
     puts $result
     puts "---------------------"
     set failed 1
-    break
   } else {
     puts "(S) TEST PASSED: $base"
   }
