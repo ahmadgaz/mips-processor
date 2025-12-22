@@ -14,8 +14,8 @@ module regfile (
   reg [31:0] rf[32];
   integer i;
 
-  // Write port (negedge to avoid WB/ID clash)
-  always @(negedge clk) begin
+  // Write port
+  always @(posedge clk) begin
     if (rst) begin
       for (i = 0; i < 32; i = i + 1)
         rf[i] <= 32'b0;
@@ -26,8 +26,15 @@ module regfile (
     end
   end
 
-  assign rd1 = (ra1 == 0) ? 0 : rf[ra1];
-  assign rd2 = (ra2 == 0) ? 0 : rf[ra2];
-  assign rd3 = (ra3 == 0) ? 0 : rf[ra3];
+  // Async reads with write-through bypass (to avoid WB/ID clash)
+  always_comb begin
+    rd1 = (ra1 == 0) ? 32'b0 : rf[ra1];
+    rd2 = (ra2 == 0) ? 32'b0 : rf[ra2];
+    rd3 = (ra3 == 0) ? 32'b0 : rf[ra3];
+
+    if (we && (wa != 0) && (wa == ra1)) rd1 = wd;
+    if (we && (wa != 0) && (wa == ra2)) rd2 = wd;
+    if (we && (wa != 0) && (wa == ra3)) rd3 = wd;
+  end
 endmodule
 

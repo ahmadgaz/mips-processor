@@ -15,12 +15,12 @@ module fact_dp #(
 );
   wire [WIDTH-1:0] n_internal;
   wire [WIDTH-1:0] curr_prod;
-  wire [WIDTH-1:0] mul_prod;
+  wire [(WIDTH*2)-1:0] mul_prod;
   wire [WIDTH-1:0] next_prod;
   assign gt_in = n > 12;
   assign gt_fact = n_internal > 1;
   assign mul_prod = curr_prod * n_internal;
-  assign next_prod = (sel_1) ? mul_prod : 1;
+  assign next_prod = (sel_1) ? mul_prod[31:0] : 1;
   assign nf = (sel_2) ? curr_prod : 0;
   down_cnt #(
       .WIDTH(WIDTH)
